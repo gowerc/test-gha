@@ -21,7 +21,7 @@ jobs:
          - { tag: "a", os: "ubuntu-18.04"}
          - { tag: "b", R: "release", os: "ubuntu-20.04", pkg_repo: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
     
-    if: ${{ ((github.base_ref == 'master' || github.base_ref == 'main') && matrix.config.tag == "a")  || matrix.config.tag == "n"  }}
+    if: ${{ (( github.base_ref == 'master' || github.base_ref == 'main' ) && matrix.tag == "a" )  || matrix.tag == "b"  }}
     
     runs-on: ${{ matrix.config.os }}
     
