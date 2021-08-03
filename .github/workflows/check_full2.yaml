@@ -17,11 +17,9 @@ jobs:
       fail-fast: false
       matrix:
         config:
-          - {tag: "a", os: "ubuntu-20.04"}
-          - {tag: "a", os: "ubuntu-18.04"}
-          - {tag: "b", os: "ubuntu-20.04"}
-
-    if: ${{ matrix.tag == "a" }}
+          - {os: "ubuntu-20.04"}
+          - {os: "ubuntu-18.04"}
+          - {os: "ubuntu-20.04"}
 
     runs-on: ${{ matrix.config.os }}
 
@@ -30,10 +28,6 @@ jobs:
       R_TEST_LONG: ${{ github.event_name == 'schedule' && 'TRUE' || 'FALSE' }}
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
+      - run: echo hello world
+      - run: echo $R_TEST_LONG
 
-      - name: test1
-        run: |
-          echo Hello world
-          echo $R_TEST_LONG
