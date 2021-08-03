@@ -1,0 +1,33 @@
+---
+on:
+  pull_request:
+    branches:
+      - develop
+      - main
+      - master
+  schedule:
+    - cron: '5 * * * *'
+
+name: Check PRs
+
+jobs:
+  R-CMD-Check-Full:
+
+    strategy:
+      fail-fast: false
+      matrix:
+        config:
+          - {os: "ubuntu-20.04"}
+          - {os: "ubuntu-18.04"}
+          - {os: "ubuntu-20.04"}
+
+    runs-on: ${{ matrix.config.os }}
+
+    env:
+      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      R_TEST_LONG: ${{ github.event_name == 'schedule' && 'TRUE' || 'FALSE' }}
+
+    steps:
+      - run: echo hello world
+      - run: echo $R_TEST_LONG
+
