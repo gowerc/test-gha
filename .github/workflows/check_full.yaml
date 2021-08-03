@@ -7,7 +7,6 @@ steps:  &steps
     run: |
       echo Hello world
       echo $R_TEST_LONG
----
 
 on: 
   pull_request:
