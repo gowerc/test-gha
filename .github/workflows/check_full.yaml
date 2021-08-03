@@ -1,13 +1,4 @@
 
-steps:  &steps
-  - name: Checkout
-    uses: actions/checkout@v2
-  
-  - name: test1
-    run: |
-      echo Hello world
-      echo $R_TEST_LONG
-
 on: 
   pull_request:
     branches:
@@ -20,38 +11,30 @@ on:
 name: Check PRs
 
 jobs:
-  R-CMD-Check-All-OS:
-    
-    if: ${{ github.base_ref == 'master' || github.base_ref == 'main' }}
-    
+  R-CMD-Check-Full:
+
     strategy:
       fail-fast: false
       matrix:
        config:
-         - { os: "ubuntu-20.04"}
-         - { os: "ubuntu-18.04"}
-         
-    runs-on: ${{ matrix.config.os }}
+         - { tag: "a", os: "ubuntu-20.04"}
+         - { tag: "a", os: "ubuntu-18.04"}
+         - { tag: "b", R: "release", os: "ubuntu-20.04", pkg_repo: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
     
-    env:
-      GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
-      
+    if: ${{ ((github.base_ref == 'master' || github.base_ref == 'main') && matrix.config.tag == "a")  || matrix.config.tag == "n"  }}
     
-    steps: *steps
-    
-  R-CMD-Check-Ubuntu:
-    
-    strategy:
-      fail-fast: false
-      matrix:
-       config:
-         - { R: "release", os: "ubuntu-20.04", pkg_repo: "https://packagemanager.rstudio.com/all/__linux__/focal/latest"}
-         
     runs-on: ${{ matrix.config.os }}
     
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_TEST_LONG: ${{ github.event_name == 'schedule' && 'TRUE' || 'FALSE' }}
     
-    steps: *steps
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      
+      - name: test1
+        run: |
+          echo Hello world
+          echo $R_TEST_LONG
 
